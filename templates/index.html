@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}AI内容创作系统 - 首页{% endblock %}
+
+{% block content %}
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-4">AI内容创作助手</h1>
+                <p class="lead mb-4">帮助个人创作者提升内容生产效率、优化多平台发布策略</p>
+                <div class="d-flex gap-3">
+                    <a href="/topic-brainstorm" class="btn btn-light btn-lg">开始创作</a>
+                    <a href="/about" class="btn btn-outline-light btn-lg">了解更多</a>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center">
+                <i class="bi bi-pencil" style="font-size: 200px; opacity: 0.2;"></i>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">核心功能</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card feature-card">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon"><i class="bi bi-lightbulb"></i></div>
+                        <h5 class="card-title">选题脑暴</h5>
+                        <p class="card-text">输入领域/关键词，生成多个选题角度</p>
+                        <a href="/topic-brainstorm" class="btn btn-primary">立即使用</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card feature-card">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon"><i class="bi bi-search"></i></div>
+                        <h5 class="card-title">爆款拆解</h5>
+                        <p class="card-text">分析爆款文章的结构和技巧</p>
+                        <a href="/viral-analysis" class="btn btn-primary">立即使用</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card feature-card">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon"><i class="bi bi-arrow-repeat"></i></div>
+                        <h5 class="card-title">多平台适配</h5>
+                        <p class="card-text">一键适配公众号/小红书/知乎</p>
+                        <a href="/platform-adaptation" class="btn btn-primary">立即使用</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card feature-card">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon"><i class="bi bi-type"></i></div>
+                        <h5 class="card-title">标题AB测试</h5>
+                        <p class="card-text">生成多个标题并评分排序</p>
+                        <a href="/title-ab-test" class="btn btn-primary">立即使用</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

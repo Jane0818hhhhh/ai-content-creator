@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% block title %}标题 AB 测试{% endblock %}
+{% block content %}
+<div class="module-header">
+    <div class="container">
+        <h2><i class="bi bi-type-h1"></i> 标题 AB 测试</h2>
+        <p class="mb-0 opacity-75">6 个不同风格候选标题 + 点击率打分，让数据决定发哪个</p>
+    </div>
+</div>
+<div class="container">
+    <div class="row g-4">
+        <div class="col-lg-5">
+            <div class="card">
+                <div class="card-body">
+                    <label class="form-label fw-bold">选题 *</label>
+                    <textarea class="form-control" id="topic" rows="3" placeholder="选题主题或已有的标题草稿"></textarea>
+                    <label class="form-label fw-bold mt-3">目标平台</label>
+                    <select class="form-select" id="platform">
+                        <option>公众号</option><option>小红书</option>
+                        <option>知乎</option><option>视频号</option>
+                    </select>
+                    <label class="form-label fw-bold mt-3">生成数量</label>
+                    <input type="number" class="form-control" id="n" value="6" min="3" max="10">
+                    <button class="btn btn-primary w-100 mt-3" id="btn-go"><i class="bi bi-shuffle"></i> 生成候选标题</button>
+
+                    <div class="tips-box mt-3 small">
+                        <strong>🎯 标题打分维度</strong>
+                        <ul class="mb-0 mt-1 ps-3">
+                            <li>点击欲（好奇心/悬念/福利钩子）</li>
+                            <li>平台算法友好度（关键词/长度）</li>
+                            <li>党味规避（不夸张、不误导）</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-7">
+            <div id="result" class="d-none">
+                <div class="card result-card mb-3">
+                    <div class="card-body">
+                        <h5>🎯 <span id="r-topic"></span> <span class="source-tag" id="r-source"></span></h5>
+
+                        <div class="alert alert-success"><strong>🏆 推荐使用：</strong> <span id="r-best"></span></div>
+
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead><tr><th>标题</th><th style="width:80px;">分数</th><th>打分理由</th><th>目标读者</th></tr></thead>
+                                <tbody id="r-titles"></tbody>
+                            </table>
+                        </div>
+
+                        <h6 class="mt-3">💡 优化建议</h6>
+                        <ul id="r-tips"></ul>
+                    </div>
+                </div>
+            </div>
+            <div id="empty" class="text-center text-muted py-5">
+                <div style="font-size:4rem;">📝</div>
+                <p>输入选题，AI 帮你生成 6 个候选</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// URL 参数预填（从选题脑暴跳来）
+const p = new URLSearchParams(location.search);
+if (p.get('topic')) document.getElementById('topic').value = p.get('topic');
+
+document.getElementById('btn-go').onclick = async () => {
+    const topic = document.getElementById('topic').value.trim();
+    if (!topic) { alert('请填选题'); return; }
+    const body = {topic, platform: document.getElementById('platform').value, n: document.getElementById('n').value};
+    const btn = document.getElementById('btn-go');
+    btn.disabled = true; btn.innerHTML = '<span class="loading-spinner"></span> 生成中…';
+    try {
+        const r = await fetch('/api/title', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body)}).then(r => r.json());
+        if (!r.success) { alert(r.error); btn.disabled = false; btn.innerHTML = '<i class="bi bi-shuffle"></i> 生成候选标题'; return; }
+        document.getElementById('empty').classList.add('d-none');
+        document.getElementById('result').classList.remove('d-none');
+        const d = r.data || {};
+        const tag = document.getElementById('r-source');
+        tag.className = 'source-tag ' + r.source;
+        tag.textContent = r.source === 'real' ? '真实 AI' : 'Mock';
+        document.getElementById('r-topic').textContent = d.topic || topic;
+        document.getElementById('r-best').textContent = d.best || '-';
+
+        const rows = (d.titles || []).sort((a,b)=>(b.score||0)-(a.score||0)).map(t => `
+            <tr>
+                <td>${t.title || '-'}</td>
+                <td><div class="progress" style="height:20px;"><div class="progress-bar bg-${(t.score||0)>=90?'success':(t.score||0)>=80?'primary':'warning'}" style="width:${t.score||0}%">${t.score||0}</div></div></td>
+                <td class="small">${t.reason || '-'}</td>
+                <td class="small">${t.audience || '-'}</td>
+            </tr>`).join('');
+        document.getElementById('r-titles').innerHTML = rows;
+        document.getElementById('r-tips').innerHTML = (d.tips || []).map(x => `<li>${x}</li>`).join('') || '<li class="text-muted">-</li>';
+    } catch (e) { alert('失败：' + e); }
+    btn.disabled = false; btn.innerHTML = '<i class="bi bi-shuffle"></i> 生成候选标题';
+};
+</script>
+{% endblock %}

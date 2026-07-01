@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+*.pyo
+.env
+kb.db
+uploads/
+*.log
+run_simple.py
+.DS_Store

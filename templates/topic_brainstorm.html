@@ -1,104 +1,105 @@
 {% extends "base.html" %}
-
-{% block title %}选题脑暴 - AI内容创作系统{% endblock %}
-
+{% block title %}选题脑暴{% endblock %}
 {% block content %}
-<section class="hero-section">
+<div class="module-header">
     <div class="container">
-        <h1 class="display-5 fw-bold">选题脑暴</h1>
-        <p class="lead">输入领域或关键词，生成多个选题角度</p>
+        <h2><i class="bi bi-lightbulb"></i> 选题脑暴</h2>
+        <p class="mb-0 opacity-75">输入一个主题，AI 从 6 个不同角度给出候选选题</p>
     </div>
-</section>
-
+</div>
 <div class="container">
-    <div class="row">
-        <div class="col-lg-4">
+    <div class="row g-4">
+        <div class="col-lg-5">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">输入创作主题</h5>
-                    <div class="mb-3">
-                        <label class="form-label">领域/关键词</label>
-                        <input type="text" class="form-control" id="topic" placeholder="例如：AI工具、编程学习">
+                    <label class="form-label fw-bold">创作主题 *</label>
+                    <input class="form-control" id="topic" placeholder="如：AI 副业 / 春天穿搭 / 育儿焦虑">
+                    <label class="form-label fw-bold mt-3">目标读者（可选）</label>
+                    <input class="form-control" id="audience" placeholder="如：25-35 岁职场女性">
+                    <label class="form-label fw-bold mt-3">语气（可选）</label>
+                    <select class="form-select" id="tone">
+                        <option value="">默认</option>
+                        <option>亲切轻松</option><option>专业深度</option>
+                        <option>犀利争议</option><option>治愈温暖</option>
+                    </select>
+                    <button class="btn btn-primary w-100 mt-3" id="btn-go"><i class="bi bi-lightning-charge"></i> 开始脑暴</button>
+                    <div class="tips-box mt-3 small">
+                        <strong>💡 使用提示</strong>
+                        <ul class="mb-0 mt-1 ps-3">
+                            <li>主题越具体，选题越精准</li>
+                            <li>提前在素材库上传参考文，AI 会自动引用</li>
+                            <li>heat 分数是 AI 综合平台算法的预估，仅供参考</li>
+                        </ul>
                     </div>
-                    <button class="btn btn-primary w-100" onclick="brainstorm()">
-                        <i class="bi bi-lightbulb"></i> 生成选题
-                    </button>
                 </div>
             </div>
         </div>
-        
-        <div class="col-lg-8">
-            <div id="loading" style="display: none;" class="text-center py-5">
-                <div class="spinner-border text-primary"></div>
-                <p class="mt-3">正在生成选题...</p>
+        <div class="col-lg-7">
+            <div id="result" class="d-none">
+                <h5 class="mb-3">✨ <span id="r-topic"></span> 的 6 个选题 <span class="source-tag" id="r-source"></span></h5>
+                <div id="ideas" class="row g-3"></div>
+
+                <div class="mt-4 card" id="kb-panel">
+                    <div class="card-header"><i class="bi bi-folder"></i> 命中的私有素材</div>
+                    <div class="card-body" id="kb-hits"></div>
+                </div>
             </div>
-            
-            <div id="result" style="display: none;">
-                <h4>选题建议</h4>
-                <div id="ideasList"></div>
-            </div>
-            
-            <div id="emptyState" class="text-center py-5">
-                <i class="bi bi-lightbulb" style="font-size: 3rem; color: #ccc;"></i>
-                <p class="mt-3 text-muted">输入主题生成选题</p>
+            <div id="empty" class="text-center text-muted py-5">
+                <div style="font-size:4rem;">💡</div>
+                <p>输入主题后，点击开始脑暴</p>
             </div>
         </div>
     </div>
 </div>
-{% endblock %}
 
-{% block extra_js %}
 <script>
-function brainstorm() {
+document.getElementById('btn-go').onclick = async () => {
     const topic = document.getElementById('topic').value.trim();
-    if (!topic) { alert('请输入主题'); return; }
-    
-    document.getElementById('loading').style.display = 'block';
-    document.getElementById('result').style.display = 'none';
-    document.getElementById('emptyState').style.display = 'none';
-    
-    fetch('/api/topic-brainstorm', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({topic: topic})
-    })
-    .then(r => r.json())
-    .then(data => {
-        document.getElementById('loading').style.display = 'none';
-        if (data.success) {
-            displayResult(data.data);
-        } else {
-            alert('生成失败');
-        }
-    })
-    .catch(e => {
-        document.getElementById('loading').style.display = 'none';
-        alert('错误：' + e);
-    });
-}
+    if (!topic) { alert('请填主题'); return; }
+    const body = {
+        topic,
+        audience: document.getElementById('audience').value,
+        tone: document.getElementById('tone').value,
+    };
+    const btn = document.getElementById('btn-go');
+    btn.disabled = true; btn.innerHTML = '<span class="loading-spinner"></span> 脑暴中…';
+    try {
+        const r = await fetch('/api/topic', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body)}).then(r => r.json());
+        document.getElementById('empty').classList.add('d-none');
+        document.getElementById('result').classList.remove('d-none');
+        const d = r.data || {};
+        document.getElementById('r-topic').textContent = d.topic || topic;
+        const tag = document.getElementById('r-source');
+        tag.className = 'source-tag ' + r.source;
+        tag.textContent = r.source === 'real' ? '真实 AI' : 'Mock';
 
-function displayResult(data) {
-    const list = document.getElementById('ideasList');
-    list.innerHTML = '';
-    
-    data.ideas.forEach((idea, idx) => {
-        const card = document.createElement('div');
-        card.className = 'card mb-3';
-        card.innerHTML = `
-            <div class="card-body">
-                <h5 class="card-title">${idx + 1}. ${idea.title}</h5>
-                <p class="card-text">
-                    <span class="badge bg-primary">${idea.angle}</span>
-                    <span class="badge bg-secondary">${idea.platform}</span>
-                    <span class="badge bg-success">热度：${idea.heat_score}</span>
-                </p>
-                <p class="card-text text-muted">${idea.reason}</p>
-            </div>
-        `;
-        list.appendChild(card);
-    });
-    
-    document.getElementById('result').style.display = 'block';
+        document.getElementById('ideas').innerHTML = (d.ideas || []).map((it, i) => `
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="badge bg-secondary">${it.angle || '-'}</span>
+                            <span class="badge bg-warning text-dark">🔥 ${it.heat || 0}</span>
+                        </div>
+                        <h6 class="mb-2">${it.title || '-'}</h6>
+                        <small class="text-muted">推荐：${it.platform || '-'} · 钩子：${it.hook || '-'}</small>
+                        <div class="mt-2"><button class="btn btn-sm btn-outline-primary" onclick="toTitle('${(it.title||'').replace(/'/g,"\\'")}')"><i class="bi bi-arrow-right"></i> AB 打分</button></div>
+                    </div>
+                </div>
+            </div>`).join('');
+
+        const kb = document.getElementById('kb-hits');
+        if (r.kb_hits && r.kb_hits.length) {
+            kb.innerHTML = r.kb_hits.map(h => `<div class="border rounded p-2 mb-2"><strong>${h.filename}</strong> <span class="badge bg-info">${h.score}</span><div class="small text-muted mt-1">${h.snippet.substring(0,150)}…</div></div>`).join('');
+        } else {
+            kb.innerHTML = '<small class="text-muted">未命中素材（<a href="/library">去上传</a>）</small>';
+        }
+    } catch (e) { alert('失败：' + e); }
+    btn.disabled = false; btn.innerHTML = '<i class="bi bi-lightning-charge"></i> 开始脑暴';
+};
+
+function toTitle(title) {
+    location.href = '/title-ab-test?topic=' + encodeURIComponent(title);
 }
 </script>
 {% endblock %}

@@ -1,71 +1,98 @@
 {% extends "base.html" %}
-
-{% block title %}AI内容创作系统 - 首页{% endblock %}
-
+{% block title %}AI 内容创作系统 · 首页{% endblock %}
 {% block content %}
 <section class="hero-section">
-    <div class="container">
+    <div class="container position-relative">
         <div class="row align-items-center">
-            <div class="col-lg-6">
-                <h1 class="display-4 fw-bold mb-4">AI内容创作助手</h1>
-                <p class="lead mb-4">帮助个人创作者提升内容生产效率、优化多平台发布策略</p>
-                <div class="d-flex gap-3">
-                    <a href="/topic-brainstorm" class="btn btn-light btn-lg">开始创作</a>
-                    <a href="/about" class="btn btn-outline-light btn-lg">了解更多</a>
+            <div class="col-lg-7">
+                <h6 class="text-uppercase mb-2" style="letter-spacing:2px; color:#f472b6;">Polaris Alchemists · 北极星·炼术师</h6>
+                <h1 class="display-4 fw-bold mb-3">AI 内容创作系统</h1>
+                <p class="lead mb-4">从灵感到爆款，一站式创作助手<br>
+                    选题脑暴 · 爆款拆解 · 多平台适配 · 标题打分 —— 让每一次创作都有数据支撑</p>
+                <div class="d-flex gap-2 flex-wrap">
+                    <a href="/topic-brainstorm" class="btn btn-accent btn-lg"><i class="bi bi-lightning-charge"></i> 开始创作</a>
+                    <a href="/about" class="btn btn-outline-light btn-lg">了解方案</a>
                 </div>
             </div>
-            <div class="col-lg-6 text-center">
-                <i class="bi bi-pencil" style="font-size: 200px; opacity: 0.2;"></i>
+            <div class="col-lg-5 text-center d-none d-lg-block">
+                <div style="font-size:12rem; line-height:1; text-shadow:0 0 40px rgba(244,114,182,.6);">✦</div>
             </div>
         </div>
     </div>
 </section>
 
-<section class="py-5">
-    <div class="container">
-        <h2 class="text-center mb-5">核心功能</h2>
-        <div class="row g-4">
-            <div class="col-md-4">
-                <div class="card feature-card">
-                    <div class="card-body text-center p-4">
-                        <div class="feature-icon"><i class="bi bi-lightbulb"></i></div>
-                        <h5 class="card-title">选题脑暴</h5>
-                        <p class="card-text">输入领域/关键词，生成多个选题角度</p>
-                        <a href="/topic-brainstorm" class="btn btn-primary">立即使用</a>
-                    </div>
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h2 class="fw-bold">四大核心模块 + 私有素材库</h2>
+        <p class="text-muted">让创作从"凭感觉"变成"有方法"</p>
+    </div>
+    <div class="row g-4">
+        <div class="col-md-6 col-lg-4">
+            <a href="/topic-brainstorm" class="text-decoration-none text-dark">
+                <div class="card feature-card p-4">
+                    <div class="feature-icon"><i class="bi bi-lightbulb"></i></div>
+                    <h5>选题脑暴</h5>
+                    <p class="text-muted small">输入主题，AI 从 6 个角度给出候选选题，附热度预估</p>
                 </div>
+            </a>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <a href="/viral-analysis" class="text-decoration-none text-dark">
+                <div class="card feature-card p-4">
+                    <div class="feature-icon"><i class="bi bi-fire"></i></div>
+                    <h5>爆款拆解</h5>
+                    <p class="text-muted small">粘贴一篇爆款，AI 拆结构、找情绪节点、给出可复用框架</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <a href="/platform-adaptation" class="text-decoration-none text-dark">
+                <div class="card feature-card p-4">
+                    <div class="feature-icon"><i class="bi bi-arrow-left-right"></i></div>
+                    <h5>多平台适配</h5>
+                    <p class="text-muted small">一稿改多稿：公众号/小红书/知乎/视频号/LinkedIn</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <a href="/title-ab-test" class="text-decoration-none text-dark">
+                <div class="card feature-card p-4">
+                    <div class="feature-icon"><i class="bi bi-type-h1"></i></div>
+                    <h5>标题 AB 测试</h5>
+                    <p class="text-muted small">6 个不同风格候选标题 + 点击率打分，选最优发</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <a href="/library" class="text-decoration-none text-dark">
+                <div class="card feature-card p-4">
+                    <div class="feature-icon"><i class="bi bi-folder"></i></div>
+                    <h5>私有素材库</h5>
+                    <p class="text-muted small">上传灵感/参考文/历史稿，AI 生成时自动检索复用</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <a href="/about" class="text-decoration-none text-dark">
+                <div class="card feature-card p-4">
+                    <div class="feature-icon"><i class="bi bi-stars"></i></div>
+                    <h5>关于我们</h5>
+                    <p class="text-muted small">团队介绍、技术架构、参赛信息</p>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <div class="mt-5 p-4 rounded" style="background: linear-gradient(135deg, #fdf4ff, #ede9fe);">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h5 class="mb-2">🚀 为什么用它？</h5>
+                <p class="mb-0 text-muted">通用 AI 只会写"看似合理"的内容，我们在每一步注入创作者思维：选题看角度差异、拆解看情绪节点、适配看平台调性、标题看点击率预估。<strong>让创作既有 AI 的效率，又有专业创作者的判断力。</strong></p>
             </div>
-            <div class="col-md-4">
-                <div class="card feature-card">
-                    <div class="card-body text-center p-4">
-                        <div class="feature-icon"><i class="bi bi-search"></i></div>
-                        <h5 class="card-title">爆款拆解</h5>
-                        <p class="card-text">分析爆款文章的结构和技巧</p>
-                        <a href="/viral-analysis" class="btn btn-primary">立即使用</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card feature-card">
-                    <div class="card-body text-center p-4">
-                        <div class="feature-icon"><i class="bi bi-arrow-repeat"></i></div>
-                        <h5 class="card-title">多平台适配</h5>
-                        <p class="card-text">一键适配公众号/小红书/知乎</p>
-                        <a href="/platform-adaptation" class="btn btn-primary">立即使用</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card feature-card">
-                    <div class="card-body text-center p-4">
-                        <div class="feature-icon"><i class="bi bi-type"></i></div>
-                        <h5 class="card-title">标题AB测试</h5>
-                        <p class="card-text">生成多个标题并评分排序</p>
-                        <a href="/title-ab-test" class="btn btn-primary">立即使用</a>
-                    </div>
-                </div>
+            <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                <a href="/topic-brainstorm" class="btn btn-primary">开始第一次脑暴 →</a>
             </div>
         </div>
     </div>
-</section>
+</div>
 {% endblock %}

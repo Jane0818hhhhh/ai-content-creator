@@ -1,49 +1,64 @@
 {% extends "base.html" %}
-
-{% block title %}关于系统 - AI内容创作系统{% endblock %}
-
+{% block title %}关于{% endblock %}
 {% block content %}
-<section class="hero-section">
+<div class="module-header">
     <div class="container">
-        <h1 class="display-5 fw-bold">关于 AI内容创作系统</h1>
-        <p class="lead">基于WorkBuddy能力构建的内容创作辅助工具</p>
+        <h2>关于 AI 内容创作系统</h2>
+        <p class="mb-0 opacity-75">北极星·炼术师 · 腾讯 AI 黑客松 · 方向二【内容】</p>
     </div>
-</section>
-
+</div>
 <div class="container">
-    <div class="row">
+    <div class="row g-4">
         <div class="col-lg-8">
-            <div class="card mb-4">
+            <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">系统简介</h5>
-                    <p class="card-text">AI内容创作系统是为个人创作者设计的智能辅助工具，旨在帮助创作者提升内容生产效率、优化多平台发布策略。</p>
-                    <p class="card-text">系统基于WorkBuddy的AI能力构建，包含选题脑暴、爆款拆解、多平台适配和标题AB测试等核心功能模块。</p>
-                </div>
-            </div>
-            
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h5 class="card-title">核心功能</h5>
+                    <h4>🎯 解决什么问题</h4>
+                    <p>内容创作者最痛的三个环节：<strong>选题没方向、爆款学不到、多平台改稿累</strong>。我们用 AI + 结构化方法论，把创作从"凭感觉"变成"有数据、有方法、可迭代"。</p>
+
+                    <h4 class="mt-4">🧩 四大模块 + 素材库</h4>
+                    <div class="row g-3 mt-2">
+                        <div class="col-md-6"><div class="border rounded p-3"><strong>1. 选题脑暴</strong><br><small class="text-muted">6 角度、6 钩子，热度预估</small></div></div>
+                        <div class="col-md-6"><div class="border rounded p-3"><strong>2. 爆款拆解</strong><br><small class="text-muted">结构 + 情绪节点 + 可复用框架</small></div></div>
+                        <div class="col-md-6"><div class="border rounded p-3"><strong>3. 多平台适配</strong><br><small class="text-muted">5 大平台调性一键改写</small></div></div>
+                        <div class="col-md-6"><div class="border rounded p-3"><strong>4. 标题 AB</strong><br><small class="text-muted">点击率打分 + 优化建议</small></div></div>
+                        <div class="col-md-12"><div class="border rounded p-3"><strong>+ 私有素材库</strong><br><small class="text-muted">BM25 检索，让 AI 用上你的私有语料</small></div></div>
+                    </div>
+
+                    <h4 class="mt-4">🛠️ 技术架构</h4>
                     <ul>
-                        <li><strong>选题脑暴</strong>：输入领域/关键词，生成多个选题角度</li>
-                        <li><strong>爆款拆解</strong>：分析爆款文章的结构和技巧</li>
-                        <li><strong>多平台适配</strong>：一键适配公众号/小红书/知乎</li>
-                        <li><strong>标题AB测试</strong>：生成多个标题并评分排序</li>
+                        <li><strong>后端</strong>：Python 3.11 + Flask + SQLite</li>
+                        <li><strong>AI</strong>：OpenAI GPT-4o（可切 Mock）</li>
+                        <li><strong>检索</strong>：BM25（含中英文分词）</li>
+                        <li><strong>文档解析</strong>：pdftotext / python-docx</li>
+                        <li><strong>前端</strong>：Bootstrap 5</li>
                     </ul>
+
+                    <h4 class="mt-4">💡 差异化亮点</h4>
+                    <ol>
+                        <li><strong>专家 Prompt 库</strong>：每个模块的 System Prompt 由内容创作专家调优过</li>
+                        <li><strong>私有语料增强</strong>：AI 在选题/拆解时会自动引用你上传的爆款/灵感</li>
+                        <li><strong>创作动作闭环</strong>：脑暴 → 拆解 → 适配 → 标题 AB 一路直达</li>
+                        <li><strong>Mock 降级保护</strong>：真实 AI 不可用时自动兜底</li>
+                    </ol>
                 </div>
             </div>
         </div>
-        
         <div class="col-lg-4">
+            <div class="card mb-3">
+                <div class="card-body text-center">
+                    <div style="font-size:5rem; color:#f472b6; text-shadow:0 0 30px rgba(244,114,182,.5);">✦</div>
+                    <h4 class="mb-1">北极星 · 炼术师</h4>
+                    <p class="text-muted mb-2">Polaris Alchemists</p>
+                    <p class="small">🌟 AI 炼真金 · 专业落地</p>
+                </div>
+            </div>
             <div class="card">
+                <div class="card-header">📦 相关资源</div>
                 <div class="card-body">
-                    <h5 class="card-title">参赛信息</h5>
-                    <p class="card-text">
-                        <strong>赛事</strong>：AI黑客松<br>
-                        <strong>方向</strong>：方向二【内容】内容创作系统<br>
-                        <strong>作品名称</strong>：AI内容创作系统<br>
-                        <strong>提交截止</strong>：2024年7月19日
-                    </p>
+                    <p class="small mb-1"><strong>本仓库</strong></p>
+                    <a href="https://git.woa.com/csc/ai-content-creator" target="_blank" class="small">git.woa.com/csc/ai-content-creator</a>
+                    <p class="small mb-1 mt-3"><strong>姊妹作品</strong></p>
+                    <a href="https://git.woa.com/csc/ai-sales-assistant" target="_blank" class="small">AI 销售助理（方向三）</a>
                 </div>
             </div>
         </div>

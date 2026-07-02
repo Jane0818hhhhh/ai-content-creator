@@ -7,3 +7,4 @@ uploads/
 *.log
 run_simple.py
 .DS_Store
+.git-rewrite/

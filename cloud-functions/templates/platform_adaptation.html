@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block title %}多平台适配{% endblock %}
+{% block content %}
+<div class="module-header">
+    <div class="container">
+        <h2><i class="bi bi-arrow-left-right"></i> 多平台适配</h2>
+        <p class="mb-0 opacity-75">一稿多平台：AI 根据平台调性改写正文、生成标题、封面建议</p>
+    </div>
+</div>
+<div class="container">
+    <div class="row g-4">
+        <div class="col-lg-5">
+            <div class="card">
+                <div class="card-body">
+                    <label class="form-label fw-bold">目标平台</label>
+                    <select class="form-select" id="platform">
+                        <option>公众号</option><option>小红书</option>
+                        <option>知乎</option><option>视频号</option><option>LinkedIn</option>
+                    </select>
+                    <label class="form-label fw-bold mt-3">原稿 *</label>
+                    <textarea class="form-control" id="content" rows="12" placeholder="粘贴原始稿件…"></textarea>
+                    <button class="btn btn-primary w-100 mt-3" id="btn-go"><i class="bi bi-arrow-repeat"></i> 一键适配</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-7">
+            <div id="result" class="d-none">
+                <div class="card result-card mb-3">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="mb-0">📱 <span id="r-platform"></span> 适配版 <span class="source-tag" id="r-source"></span></h5>
+                            <button class="btn btn-sm btn-outline-primary" id="btn-copy"><i class="bi bi-clipboard"></i> 复制正文</button>
+                        </div>
+
+                        <h6>📝 改写后的正文</h6>
+                        <pre id="r-content" style="white-space:pre-wrap; font-family:inherit; background:#faf7ff; padding:15px; border-radius:6px; max-height:400px; overflow-y:auto;">-</pre>
+
+                        <div class="row g-3 mt-2">
+                            <div class="col-12">
+                                <h6>💡 标题建议</h6>
+                                <ul id="r-titles"></ul>
+                            </div>
+                            <div class="col-md-6"><div class="border rounded p-3 h-100"><small class="text-muted">封面建议</small><div class="mt-1" id="r-cover"></div></div></div>
+                            <div class="col-md-6"><div class="border rounded p-3 h-100"><small class="text-muted">最佳发布时间</small><div class="mt-1 fw-bold" id="r-time"></div></div></div>
+                            <div class="col-12">
+                                <small class="text-muted">推荐标签：</small>
+                                <div id="r-tags" class="mt-1"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="empty" class="text-center text-muted py-5">
+                <div style="font-size:4rem;">🔀</div>
+                <p>选平台 + 粘原稿，一键适配</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('btn-go').onclick = async () => {
+    const content = document.getElementById('content').value.trim();
+    if (!content) { alert('请填原稿'); return; }
+    const body = {platform: document.getElementById('platform').value, content};
+    const btn = document.getElementById('btn-go');
+    btn.disabled = true; btn.innerHTML = '<span class="loading-spinner"></span> 适配中…';
+    try {
+        const r = await fetch('/api/platform', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body)}).then(r => r.json());
+        if (!r.success) { alert(r.error); btn.disabled = false; btn.innerHTML = '<i class="bi bi-arrow-repeat"></i> 一键适配'; return; }
+        document.getElementById('empty').classList.add('d-none');
+        document.getElementById('result').classList.remove('d-none');
+        const d = r.data || {};
+        const tag = document.getElementById('r-source');
+        tag.className = 'source-tag ' + r.source;
+        tag.textContent = r.source === 'real' ? '真实 AI' : 'Mock';
+        document.getElementById('r-platform').textContent = d.platform || body.platform;
+        document.getElementById('r-content').textContent = d.adapted_content || r.raw;
+        document.getElementById('r-titles').innerHTML = (d.title_suggestions || []).map(x => `<li>${x}</li>`).join('') || '<li class="text-muted">-</li>';
+        document.getElementById('r-cover').textContent = d.cover_advice || '-';
+        document.getElementById('r-time').textContent = d.best_publish_time || '-';
+        document.getElementById('r-tags').innerHTML = (d.tags_suggested || []).map(t => `<span class="badge bg-info me-1">${t}</span>`).join('') || '-';
+    } catch (e) { alert('失败：' + e); }
+    btn.disabled = false; btn.innerHTML = '<i class="bi bi-arrow-repeat"></i> 一键适配';
+};
+
+document.getElementById('btn-copy').onclick = () => {
+    navigator.clipboard.writeText(document.getElementById('r-content').textContent).then(() => alert('已复制'));
+};
+</script>
+{% endblock %}

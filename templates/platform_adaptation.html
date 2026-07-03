@@ -74,12 +74,12 @@ document.getElementById('btn-go').onclick = async () => {
         const tag = document.getElementById('r-source');
         tag.className = 'source-tag ' + r.source;
         tag.textContent = r.source === 'real' ? '真实 AI' : 'Mock';
-        document.getElementById('r-platform').textContent = d.platform || body.platform;
-        document.getElementById('r-content').textContent = d.adapted_content || r.raw;
-        document.getElementById('r-titles').innerHTML = (d.title_suggestions || []).map(x => `<li>${x}</li>`).join('') || '<li class="text-muted">-</li>';
-        document.getElementById('r-cover').textContent = d.cover_advice || '-';
-        document.getElementById('r-time').textContent = d.best_publish_time || '-';
-        document.getElementById('r-tags').innerHTML = (d.tags_suggested || []).map(t => `<span class="badge bg-info me-1">${t}</span>`).join('') || '-';
+        document.getElementById('r-platform').textContent = safeText(d.platform) || body.platform;
+        document.getElementById('r-content').textContent = safeText(d.adapted_content) || r.raw;
+        document.getElementById('r-titles').innerHTML = (d.title_suggestions || []).map(x => `<li>${safeText(x)}</li>`).join('') || '<li class="text-muted">-</li>';
+        document.getElementById('r-cover').textContent = safeText(d.cover_advice) || '-';
+        document.getElementById('r-time').textContent = safeText(d.best_publish_time) || '-';
+        document.getElementById('r-tags').innerHTML = (d.tags_suggested || []).map(t => `<span class="badge bg-info me-1">${safeText(t)}</span>`).join('') || '-';
     } catch (e) { alert('失败：' + e); }
     btn.disabled = false; btn.innerHTML = '<i class="bi bi-arrow-repeat"></i> 一键适配';
 };

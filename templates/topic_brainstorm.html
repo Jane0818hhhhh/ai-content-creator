@@ -68,25 +68,28 @@ document.getElementById('btn-go').onclick = async () => {
         document.getElementById('empty').classList.add('d-none');
         document.getElementById('result').classList.remove('d-none');
         const d = r.data || {};
-        document.getElementById('r-topic').textContent = d.topic || topic;
+        document.getElementById('r-topic').textContent = safeText(d.topic) || topic;
         const tag = document.getElementById('r-source');
         tag.className = 'source-tag ' + r.source;
         tag.textContent = r.source === 'real' ? '真实 AI' : 'Mock';
 
-        document.getElementById('ideas').innerHTML = (d.ideas || []).map((it, i) => `
+        document.getElementById('ideas').innerHTML = (d.ideas || []).map((it, i) => {
+            const title = safeText(it.title) || '-';
+            return `
             <div class="col-md-6">
                 <div class="card h-100">
                     <div class="card-body">
                         <div class="d-flex justify-content-between mb-2">
-                            <span class="badge bg-secondary">${it.angle || '-'}</span>
-                            <span class="badge bg-warning text-dark">🔥 ${it.heat || 0}</span>
+                            <span class="badge bg-secondary">${safeText(it.angle) || '-'}</span>
+                            <span class="badge bg-warning text-dark">🔥 ${safeText(it.heat) || 0}</span>
                         </div>
-                        <h6 class="mb-2">${it.title || '-'}</h6>
-                        <small class="text-muted">推荐：${it.platform || '-'} · 钩子：${it.hook || '-'}</small>
-                        <div class="mt-2"><button class="btn btn-sm btn-outline-primary" onclick="toTitle('${(it.title||'').replace(/'/g,"\\'")}')"><i class="bi bi-arrow-right"></i> AB 打分</button></div>
+                        <h6 class="mb-2">${title}</h6>
+                        <small class="text-muted">推荐：${safeText(it.platform) || '-'} · 钩子：${safeText(it.hook) || '-'}</small>
+                        <div class="mt-2"><button class="btn btn-sm btn-outline-primary" onclick="toTitle('${title.replace(/'/g,"\\'")}')"><i class="bi bi-arrow-right"></i> AB 打分</button></div>
                     </div>
                 </div>
-            </div>`).join('');
+            </div>`;
+        }).join('');
 
         const kb = document.getElementById('kb-hits');
         if (r.kb_hits && r.kb_hits.length) {

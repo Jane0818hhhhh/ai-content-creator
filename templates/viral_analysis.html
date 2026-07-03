@@ -97,12 +97,12 @@ document.getElementById('btn-go').onclick = async () => {
         const tag = document.getElementById('r-source');
         tag.className = 'source-tag ' + r.source;
         tag.textContent = r.source === 'real' ? '真实 AI' : 'Mock';
-        document.getElementById('r-struct').textContent = d.structure || '-';
-        document.getElementById('r-why').textContent = d.why_viral || '-';
-        document.getElementById('r-titletips').innerHTML = (d.title_tips || []).map(x => `<li>${x}</li>`).join('') || '<li class="text-muted">-</li>';
-        document.getElementById('r-emotion').innerHTML = (d.emotion_nodes || []).map(x => `<li>${x}</li>`).join('') || '<li class="text-muted">-</li>';
-        document.getElementById('r-framework').textContent = d.framework || '-';
-        document.getElementById('r-sugs').innerHTML = (d.suggestions || []).map(x => `<li>${x}</li>`).join('') || '<li class="text-muted">-</li>';
+        document.getElementById('r-struct').textContent = safeText(d.structure) || '-';
+        document.getElementById('r-why').textContent = safeText(d.why_viral) || '-';
+        document.getElementById('r-titletips').innerHTML = (d.title_tips || []).map(x => `<li>${safeText(x)}</li>`).join('') || '<li class="text-muted">-</li>';
+        document.getElementById('r-emotion').innerHTML = (d.emotion_nodes || []).map(x => `<li>${safeText(x)}</li>`).join('') || '<li class="text-muted">-</li>';
+        document.getElementById('r-framework').textContent = safeText(d.framework) || '-';
+        document.getElementById('r-sugs').innerHTML = (d.suggestions || []).map(x => `<li>${safeText(x)}</li>`).join('') || '<li class="text-muted">-</li>';
     } catch (e) { alert('失败：' + e); }
     btn.disabled = false; btn.innerHTML = '<i class="bi bi-graph-up-arrow"></i> 开始拆解';
 };

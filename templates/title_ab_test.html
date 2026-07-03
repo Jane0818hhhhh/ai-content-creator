@@ -82,18 +82,21 @@ document.getElementById('btn-go').onclick = async () => {
         const tag = document.getElementById('r-source');
         tag.className = 'source-tag ' + r.source;
         tag.textContent = r.source === 'real' ? '真实 AI' : 'Mock';
-        document.getElementById('r-topic').textContent = d.topic || topic;
-        document.getElementById('r-best').textContent = d.best || '-';
+        document.getElementById('r-topic').textContent = safeText(d.topic) || topic;
+        document.getElementById('r-best').textContent = safeText(d.best) || '-';
 
-        const rows = (d.titles || []).sort((a,b)=>(b.score||0)-(a.score||0)).map(t => `
+        const rows = (d.titles || []).sort((a,b)=>(Number(b.score)||0)-(Number(a.score)||0)).map(t => {
+            const score = Number(t.score) || 0;
+            return `
             <tr>
-                <td>${t.title || '-'}</td>
-                <td><div class="progress" style="height:20px;"><div class="progress-bar bg-${(t.score||0)>=90?'success':(t.score||0)>=80?'primary':'warning'}" style="width:${t.score||0}%">${t.score||0}</div></div></td>
-                <td class="small">${t.reason || '-'}</td>
-                <td class="small">${t.audience || '-'}</td>
-            </tr>`).join('');
+                <td>${safeText(t.title) || '-'}</td>
+                <td><div class="progress" style="height:20px;"><div class="progress-bar bg-${score>=90?'success':score>=80?'primary':'warning'}" style="width:${score}%">${score}</div></div></td>
+                <td class="small">${safeText(t.reason) || '-'}</td>
+                <td class="small">${safeText(t.audience) || '-'}</td>
+            </tr>`;
+        }).join('');
         document.getElementById('r-titles').innerHTML = rows;
-        document.getElementById('r-tips').innerHTML = (d.tips || []).map(x => `<li>${x}</li>`).join('') || '<li class="text-muted">-</li>';
+        document.getElementById('r-tips').innerHTML = (d.tips || []).map(x => `<li>${safeText(x)}</li>`).join('') || '<li class="text-muted">-</li>';
     } catch (e) { alert('失败：' + e); }
     btn.disabled = false; btn.innerHTML = '<i class="bi bi-shuffle"></i> 生成候选标题';
 };

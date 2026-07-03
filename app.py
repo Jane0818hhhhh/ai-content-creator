@@ -126,10 +126,10 @@ def api_topic():
     kb_ctx = '\n'.join([f"- {h['filename']}: {h['snippet'][:150]}" for h in hits])
 
     system = '你是资深内容策划，擅长为公众号、小红书、知乎、视频号生成有传播力的选题。'
-    user = f"""围绕主题「{topic}」生成 6 个不同角度的选题，输出 JSON：
+    user = f"""围绕主题「{topic}」生成 6 个不同角度的选题，输出 JSON（title/angle/platform/hook 必须是字符串，不能是数组或对象；heat 必须是 0-100 的数字）：
 {{
-  "topic": "...",
-  "ideas": [{{"title":"标题", "angle":"角度类型", "platform":"推荐平台", "heat":预估热度分数(0-100), "hook":"钩子类型"}}]
+  "topic": "字符串",
+  "ideas": [{{"title":"字符串，标题", "angle":"字符串，角度类型", "platform":"字符串，推荐平台", "heat":预估热度分数(0-100的数字), "hook":"字符串，钩子类型"}}]
 }}
 
 - 目标读者：{audience or '通用'}
@@ -161,14 +161,14 @@ def api_viral():
         return jsonify({'success': False, 'error': '请粘贴爆款文本或选择素材库文件'})
 
     system = '你是爆款内容拆解专家，善于从一篇爆款中提炼可复用的结构与模板。'
-    user = f"""请拆解以下爆款内容，输出 JSON：
+    user = f"""请拆解以下爆款内容，输出 JSON（以下字段全部要求字符串或字符串数组，禁止嵌套对象）：
 {{
-  "structure": "全文结构一句话概括",
-  "title_tips": ["标题技巧1", "..."],
-  "emotion_nodes": ["情绪节点位置与作用"],
-  "framework": "可复用的写作框架（如 提问→痛点→观点→步骤）",
-  "suggestions": ["下次自己写同类主题的建议"],
-  "why_viral": "一段话解释这篇为什么爆"
+  "structure": "字符串，全文结构一句话概括",
+  "title_tips": ["字符串数组，标题技巧"],
+  "emotion_nodes": ["字符串数组，情绪节点位置与作用"],
+  "framework": "字符串，可复用的写作框架（如 提问→痛点→观点→步骤）",
+  "suggestions": ["字符串数组，下次自己写同类主题的建议"],
+  "why_viral": "字符串，一段话解释这篇为什么爆"
 }}
 
 爆款正文：
@@ -207,14 +207,14 @@ def api_platform():
 原稿：
 \"\"\"{original[:4000]}\"\"\"
 
-输出 JSON：
+输出 JSON（以下字段全部要求字符串或字符串数组，禁止嵌套对象）：
 {{
   "platform": "{platform}",
-  "adapted_content": "改写后的完整正文",
-  "title_suggestions": ["标题1", "标题2", "标题3"],
-  "cover_advice": "封面/首图建议",
-  "best_publish_time": "最佳发布时间",
-  "tags_suggested": ["#标签1", "#标签2"]
+  "adapted_content": "字符串，改写后的完整正文",
+  "title_suggestions": ["字符串数组，标题1/标题2/标题3"],
+  "cover_advice": "字符串，封面/首图建议",
+  "best_publish_time": "字符串，最佳发布时间",
+  "tags_suggested": ["字符串数组，#标签1/#标签2"]
 }}
 
 仅返回 JSON。"""
@@ -235,12 +235,12 @@ def api_title():
         return jsonify({'success': False, 'error': '请填选题'})
 
     system = '你是标题工程师，懂算法推荐机制。'
-    user = f"""为选题「{topic}」（平台：{platform}）生成 {n} 个候选标题，输出 JSON：
+    user = f"""为选题「{topic}」（平台：{platform}）生成 {n} 个候选标题，输出 JSON（title/reason/audience 必须是字符串，score 必须是 0-100 的数字）：
 {{
   "topic": "{topic}",
-  "titles": [{{"title":"...", "score":点击率预估0-100, "reason":"打分理由", "audience":"目标读者"}}],
-  "best": "推荐使用的最佳标题",
-  "tips": ["优化建议"]
+  "titles": [{{"title":"字符串", "score":点击率预估0-100的数字, "reason":"字符串，打分理由", "audience":"字符串，目标读者"}}],
+  "best": "字符串，推荐使用的最佳标题",
+  "tips": ["字符串数组，优化建议"]
 }}
 
 要求：
